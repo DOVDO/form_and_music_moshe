@@ -3,85 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ברוכים הבאים - משה</title>
+    <title>מערכת ניהול - משה</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f9;
+            background-color: #eef2f3;
             text-align: center;
         }
+
+        /* סרגל בקרה עליון */
+        #audio-controls {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #333;
+            color: white;
+            padding: 10px 0;
+            display: none; /* מוסתר בהתחלה */
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .ctrl-btn {
+            background: #444;
+            border: 1px solid #666;
+            color: white;
+            padding: 5px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .ctrl-btn:hover { background: #555; }
+
         .container {
-            padding: 20px;
+            padding: 30px;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 90%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 85%;
             max-width: 400px;
+            margin-top: 50px;
         }
-        button {
-            padding: 15px 25px;
-            font-size: 18px;
+
+        button.main-btn {
+            padding: 15px;
+            font-size: 17px;
             cursor: pointer;
             border: none;
-            border-radius: 8px;
-            background-color: #007bff;
+            border-radius: 10px;
+            background-color: #28a745;
             color: white;
-            transition: transform 0.2s, background-color 0.2s;
             width: 100%;
-            margin: 10px 0;
+            margin: 8px 0;
+            transition: all 0.3s;
+            font-weight: bold;
         }
-        button:hover {
-            background-color: #0056b3;
-            transform: scale(1.02);
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .hidden {
-            display: none;
-        }
-        h1 { color: #333; }
+
+        button.main-btn:hover { background-color: #218838; transform: translateY(-2px); }
+        button.main-btn:disabled { background-color: #adb5bd; transform: none; }
+
+        .hidden { display: none !important; }
+
+        input[type="range"] { vertical-align: middle; cursor: pointer; }
     </style>
 </head>
 <body>
 
+<div id="audio-controls">
+    <span>🎶 מוזיקה:</span>
+    <button class="ctrl-btn" onclick="pauseAudio()">עצור</button>
+    <button class="ctrl-btn" onclick="playAudio()">המשך</button>
+    <label for="volume">עוצמה:</label>
+    <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5" oninput="setVolume(this.value)">
+</div>
+
 <div class="container">
     <div id="welcome-screen">
         <h1>ברוכים הבאים</h1>
-        <button id="entry-btn" onclick="startApp()">היכנס</button>
+        <p>לחץ על הכפתור כדי להתחיל</p>
+        <button class="main-btn" style="background-color: #007bff;" onclick="startApp()">היכנס</button>
     </div>
 
     <div id="menu-screen" class="hidden">
-        <h1>תפריט פעולות</h1>
-        <button onclick="window.open('https://google.com', '_blank')">טופס למילוי הוצאות</button>
-        <button onclick="window.open('https://google.com', '_blank')">דיווח תקלות</button>
-        <button onclick="window.open('https://google.com', '_blank')">דיווח חסרים</button>
-        <button disabled>בהכנה (לא פעיל)</button>
+        <h2 style="margin-top:0;">תפריט ניהול</h2>
+        <button class="main-btn" onclick="window.open('https://YOUR-LINK-1.com', '_blank')">טופס למילוי הוצאות</button>
+        <button class="main-btn" onclick="window.open('https://YOUR-LINK-2.com', '_blank')">דיווח תקלות</button>
+        <button class="main-btn" onclick="window.open('https://YOUR-LINK-3.com', '_blank')">דיווח חסרים</button>
+        <button class="main-btn" disabled>בהכנה (לא פעיל)</button>
     </div>
 </div>
 
-<audio id="myAudio">
+<audio id="myAudio" loop>
     <source src="song_yair.mp3" type="audio/mpeg">
-    הדפדפן שלך לא תומך בנגן אודיו.
 </audio>
 
 <script>
-    function startApp() {
-        // 1. נסיון הפעלת המוזיקה
-        const audio = document.getElementById('myAudio');
-        audio.play().catch(error => {
-            console.log("הפעלה אוטומטית נחסמה או קובץ לא נמצא:", error);
-        });
+    const audio = document.getElementById('myAudio');
+    const controls = document.getElementById('audio-controls');
 
-        // 2. החלפת תצוגת הכפתורים
+    function startApp() {
+        // מציג את הסרגל העליון
+        controls.style.display = 'flex';
+        
+        // מפעיל מוזיקה
+        playAudio();
+
+        // מחליף מסכים
         document.getElementById('welcome-screen').classList.add('hidden');
         document.getElementById('menu-screen').classList.remove('hidden');
+    }
+
+    function playAudio() {
+        audio.play().catch(e => console.log("שגיאת הפעלה:", e));
+    }
+
+    function pauseAudio() {
+        audio.pause();
+    }
+
+    function setVolume(val) {
+        audio.volume = val;
     }
 </script>
 
