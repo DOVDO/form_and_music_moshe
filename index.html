@@ -1,15 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="he" dir="rtl">
 <head>
-<title>בדיקה</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ברוכים הבאים - משה</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.02);
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .hidden {
+            display: none;
+        }
+        h1 { color: #333; }
+    </style>
 </head>
 <body>
-<button id="playBtn">הפעל שיר</button>
-<audio id="music" controls src="<https://raw.githubusercontent.com/DOVDO/form_and_music_moshe/main/song_yair.mp3>"></audio>
+
+<div class="container">
+    <div id="welcome-screen">
+        <h1>ברוכים הבאים</h1>
+        <button id="entry-btn" onclick="startApp()">היכנס</button>
+    </div>
+
+    <div id="menu-screen" class="hidden">
+        <h1>תפריט פעולות</h1>
+        <button onclick="window.open('https://google.com', '_blank')">טופס למילוי הוצאות</button>
+        <button onclick="window.open('https://google.com', '_blank')">דיווח תקלות</button>
+        <button onclick="window.open('https://google.com', '_blank')">דיווח חסרים</button>
+        <button disabled>בהכנה (לא פעיל)</button>
+    </div>
+</div>
+
+<audio id="myAudio">
+    <source src="song_yair.mp3" type="audio/mpeg">
+    הדפדפן שלך לא תומך בנגן אודיו.
+</audio>
+
 <script>
-document.getElementById('playBtn').addEventListener('click', function() {
-document.getElementById('music').play();
-});
+    function startApp() {
+        // 1. נסיון הפעלת המוזיקה
+        const audio = document.getElementById('myAudio');
+        audio.play().catch(error => {
+            console.log("הפעלה אוטומטית נחסמה או קובץ לא נמצא:", error);
+        });
+
+        // 2. החלפת תצוגת הכפתורים
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('menu-screen').classList.remove('hidden');
+    }
 </script>
+
 </body>
 </html>
