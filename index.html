@@ -30,11 +30,11 @@
       display: none;
       width: 100%;
       height: 100vh;
+      text-align: center;
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    #formContainer a {
+      font-size: 20px;
+      color: #4285f4;
     }
   </style>
 </head>
@@ -47,7 +47,8 @@
   </audio>
 
   <div id="formContainer">
-    <iframe src="<https://docs.google.com/forms/d/e/1FAIpQLSd7lYTnK0SZa0c3aY6rzJY7ByvxrHYMz-h4yyUoISfVR-ch3w/viewform?embedded=true>"></iframe>
+    <p>🎵 המוזיקה מתנגנת!</p>
+    <a href="<https://docs.google.com/forms/d/e/1FAIpQLSd7lYTnK0SZa0c3aY6rzJY7ByvxrHYMz-h4yyUoISfVR-ch3w/viewform>" target="_blank">לחץ כאן לפתיחת הטופס</a>
   </div>
 
   <script>
@@ -55,6 +56,7 @@
       document.getElementById('music').play();
       document.getElementById('formContainer').style.display = 'block';
       this.style.display = 'none';
+      window.open('<https://docs.google.com/forms/d/e/1FAIpQLSd7lYTnK0SZa0c3aY6rzJY7ByvxrHYMz-h4yyUoISfVR-ch3w/viewform>', '_blank');
     });
   </script>
 
